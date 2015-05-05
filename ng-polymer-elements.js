@@ -1,8 +1,35 @@
 (function(angular) {
 
     angular.module('ng-polymer-elements', [])
-    	.config(['$compileProvider', '$injector', function($compileProvider, $injector) {
-    		
+    	.directive("ngBlur", function () {
+	  return {
+	    controller: function ($scope, $element, $attrs) {
+	      $element.bind('onBlur', onBlurFire);
+	      
+	      function onBlurFire(event) {
+	        var method = '$scope.' + $element.attr('ng-blur');
+	        $scope.$apply(function () {
+	          eval(method);
+	        });
+	      };
+	    }
+	  };
+	})
+	.directive("ngFocus", function () {
+	  return {
+	    controller: function ($scope, $element, $attrs) {
+	      $element.bind('onFocus', onFocusFire);
+	      
+	      function onFocusFire(event) {
+	        var method = '$scope.' + $element.attr('ng-focus');
+	        $scope.$apply(function () {
+	          eval(method);
+	        });
+	      };
+	    }
+	  };
+	})
+	.config(['$compileProvider', '$injector', function($compileProvider, $injector) {
     		'use strict';
 
     		// Each mapping is an object where the key is the directive/custom element
@@ -43,10 +70,12 @@
 
     	    var allMappings = {
     	        paperInput: inputMappings,
+    	        paperProgress: inputMappings,
     	        paperRadioGroup: selectorMappings,
     	        paperTabs: selectorMappings,
     	        coreSelector: selectorMappings,
     	        coreMenu: selectorMappings,
+    	        coreAnimatedPages: selectorMappings,
     	        paperCheckbox: checkMappings,
     	        paperToggleButton: checkMappings,
     	        coreOverlay: openableMappings,
